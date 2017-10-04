@@ -1,4 +1,4 @@
-hostname = window.location.hostname
+const hostname = window.location.hostname
 exports.config = {
     // 'host': 'localhost',
     'host': hostname,
