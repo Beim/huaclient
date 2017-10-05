@@ -198,7 +198,6 @@ class ManagePage extends Component {
         let ret = await httpget(`http://${config.host}:${config.port}/api/get/state`)
         if (ret && ret.ok) {
             this.setState({runningState: ret.data})
-            console.log('state: ', ret.data)
         }
         else {
             console.log('err: ', ret)
