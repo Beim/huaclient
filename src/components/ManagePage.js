@@ -227,6 +227,16 @@ class ManagePage extends Component {
         }
     }
 
+    async resetGiftHandler(giftName, stepNum, reward) {
+        const ret = await httpget(`http://${config.host}:${config.port}/api/new/goal/${giftName}/${config.room_id}?step_num=${stepNum}&&reward=${reward}`)
+        if (ret && ret.ok === 1) {
+            window.location.href = window.location.pathname
+        }
+        else {
+            console.log('err: ', ret)
+        }
+    }
+
 
     genTr() {
         const data = this.state.data
@@ -241,6 +251,7 @@ class ManagePage extends Component {
                     <td>
                         <button onClick={this.achieveGiftHandler.bind(this, val.gift_name)} type="button" className="btn btn-primary btn-xs">达成</button>
                         <button onClick={this.delGiftHandler.bind(this, val.gift_name)} data-toggle="modal" data-target="#del-alert-model" type="button" className="btn btn-primary btn-xs">删除</button>
+                        <button onClick={this.resetGiftHandler.bind(this, val.gift_name, val.step, val.reward)} type="button" className="btn btn-primary btn-xs">清空</button>
                     </td>
                 </tr>
             )
