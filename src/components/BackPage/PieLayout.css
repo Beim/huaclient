@@ -1,0 +1,14 @@
+table {
+    table-layout:fixed
+}
+
+.b-content-header {
+    display: flex;
+    justify-content: center;
+}
+
+.b-content-body {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}

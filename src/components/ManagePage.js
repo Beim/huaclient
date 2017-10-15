@@ -120,10 +120,6 @@ class NewGiftModel extends Component {
 
 class DelAlertModel extends Component {
 
-    constructor(props) {
-        super(props)
-    }
-
     async delGiftHandler() {
         const giftName = this.props.delGiftName
         let ret = await httpget(`http://${config.host}:${config.port}/api/del/goal/${giftName}/${config.room_id}`)
