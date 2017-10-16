@@ -2,13 +2,15 @@ table {
     table-layout:fixed
 }
 
-.b-content-header {
+.b-header-content {
     display: flex;
     justify-content: center;
+    margin-bottom: 40px;
 }
 
 .b-content-body {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     margin-top: 50px;
 }

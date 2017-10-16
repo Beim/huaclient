@@ -22,7 +22,7 @@ class BackPage extends Component {
         ]
         this.sub2Arr = [
             ['sub2.pie', '礼物占比'],
-            ['sub2.data', 'sample']
+            // ['sub2.data', 'sample']
         ]
         this.tab = {
             'sub1.index': this.genIndexTab,

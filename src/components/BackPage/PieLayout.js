@@ -8,7 +8,9 @@ import { Radio } from 'antd'
 import { message } from 'antd'
 import moment from 'moment'
 import DateChooser from './DateChooser.js'
+import GiftParser from './GiftParser.js'
 import PieChart from './PieChart.js'
+import BarChart from './BarChart.js'
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
@@ -21,66 +23,135 @@ class PieLayout extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            giftDataByType: {
-                '0': { count: 0, price: 0, }, // 免费礼物
-                '1': { count: 0, price: 0, }, // 收费礼物
-                '2': { count: 0, price: 0, }, // 收费活动
-                '3': { count: 0, price: 0, }, // 免费活动
-            },
             chartArgs: {
                 '0': {
                     'title': '数量统计',
+                    'subtitle': '',
                     'name': '单位/个',
-                    'data': []
+                    'data': [
+                        // {name: '辣条', value: 100},
+                    ]
                 },
                 '1': {
                     'title': '价值统计',
+                    'subtitle': '',
                     'name': '单位/瓜子',
-                    'data': []
-                }
-            }
+                    'data': [
+                        // {name: '辣条', value: 100},
+                    ]
+                },
+                '2': {
+                    'title': '数量统计',
+                    'subtitle': '',
+                    'name': '单位/个',
+                    'data': [
+                        // {name: '辣条', value: 100},
+                    ]
+                },
+                '3': {
+                    'title': '价值统计',
+                    'subtitle': '',
+                    'name': '单位/瓜子',
+                    'data': [
+                        // {name: '辣条', value: 100},
+                    ]
+                },
+            },
+            chartArgsShow: {
+                '0': {
+                    'title': '数量统计',
+                    'subtitle': '',
+                    'name': '单位/个',
+                    'data': [
+                        // {name: '辣条', value: 100},
+                    ]
+                },
+                '1': {
+                    'title': '价值统计',
+                    'subtitle': '',
+                    'name': '单位/瓜子',
+                    'data': [
+                        // {name: '辣条', value: 100},
+                    ]
+                },
+                '2': {
+                    'title': '数量统计',
+                    'subtitle': '',
+                    'name': '单位/个',
+                    'data': [
+                        // {name: '辣条', value: 100},
+                    ]
+                },
+                '3': {
+                    'title': '价值统计',
+                    'subtitle': '',
+                    'name': '单位/瓜子',
+                    'data': [
+                        // {name: '辣条', value: 100},
+                    ]
+                },
+            },
+            checkListGift: [],
         }
         this.onDateChange = this.onDateChange.bind(this)
+        this.onGiftCheckChange = this.onGiftCheckChange.bind(this)
     }
 
-    getChartArgs(giftData) {
-        let chartArgs = this.state.chartArgs
-        chartArgs['0']['data'] = [
-            {name: '免费礼物', value: giftData['0']['count']},
-            {name: '收费礼物', value: giftData['1']['count']},
-            {name: '收费活动', value: giftData['2']['count']},
-            {name: '免费活动', value: giftData['3']['count']},
-        ]
-        chartArgs['1']['data'] = [
-            {name: '免费礼物', value: giftData['0']['price']},
-            {name: '收费礼物', value: giftData['1']['price']},
-            {name: '收费活动', value: giftData['2']['price']},
-            {name: '免费活动', value: giftData['3']['price']},
-        ]
-        return chartArgs
-    }
-
-    getGiftData(data) {
-        const giftDataByType = {
-            '0': { count: 0, price: 0, },
-            '1': { count: 0, price: 0, },
-            '2': { count: 0, price: 0, },
-            '3': { count: 0, price: 0, },
+    updateChartArgsByCharge(chartArgs, giftDateByCharge) {
+        chartArgs['0']['data'] = []
+        chartArgs['1']['data'] = []
+        chartArgs['2']['data'] = []
+        chartArgs['3']['data'] = []
+        for (let name in giftDateByCharge) {
+            let {count, price} = giftDateByCharge[name]
+            chartArgs['0']['data'].push({ name, value: count })
+            chartArgs['1']['data'].push({ name, value: price })
+            chartArgs['2']['data'].push({ name, value: count })
+            chartArgs['3']['data'].push({ name, value: price })
         }
-        data.map((val) => {
-            const gift = val.gift
-            giftDataByType[gift.type]['count'] += gift.count
-            giftDataByType[gift.type]['price'] += gift.price * gift.count
-        })
-        return giftDataByType
+        this.updateChartArgsSubtitle(chartArgs)
+    }
+
+    updateChartArgsSubtitle(chartArgs) {
+        let totalCount = 0
+        let totalValue = 0
+        for (let val of chartArgs['2']['data']) {
+            totalCount += val.value
+        }
+        for (let val of chartArgs['3']['data']) {
+            totalValue += val.value
+        }
+        chartArgs['2'].subtitle = `总计 ${totalCount}（单位/个）`
+        chartArgs['3'].subtitle = `总计 ${totalValue}（单位/瓜子）`
+    }
+
+    updateCheckListGift(checkListGift, data) {
+        checkListGift.length = 0 // 清空数组
+        for (let name in data)
+            checkListGift.push(name)
     }
 
     async onDateChange(dateRange) {
         const ret = await httpget(`http://${config.host}:${config.port}/api/get/giftdata?ts0=${dateRange.start}&&ts1=${dateRange.end}`)
         if (!ret || !ret.ok) return
-        const giftDataByType = this.getGiftData(ret.data)
-        const chartArgs = this.getChartArgs(giftDataByType)
-        this.setState({giftDataByType, chartArgs})
+        const data = ret.data
+        const chartArgs = this.state.chartArgs
+        this.updateChartArgsByCharge(chartArgs, data)
+        const checkListGift = this.state.checkListGift
+        this.updateCheckListGift(checkListGift, data)
+        const chartArgsShow = JSON.parse(JSON.stringify(chartArgs))
+        this.setState({chartArgs, chartArgsShow, checkListGift})
+        console.log(data)
+    }
+
+    onGiftCheckChange(checkedGift) {
+        const chartArgs = this.state.chartArgs
+        const chartArgsShow = this.state.chartArgsShow
+        chartArgsShow['0']['data'] = chartArgs['0']['data'].filter(val => checkedGift.includes(val.name))
+        chartArgsShow['1']['data'] = chartArgs['1']['data'].filter(val => checkedGift.includes(val.name))
+        chartArgsShow['2']['data'] = chartArgs['2']['data'].filter(val => checkedGift.includes(val.name))
+        chartArgsShow['3']['data'] = chartArgs['3']['data'].filter(val => checkedGift.includes(val.name))
+        this.setState({chartArgsShow})
     }
 
     render() {
@@ -95,24 +166,38 @@ class PieLayout extends Component {
                 </div>
                 <div className="ant-layout-container">
                     <div className="ant-layout-content">
-                        <div style={{ height: 590 }}>
+                        <div style={{ 'max-height': 2333, 'min-height': 550 }}>
                             {/* 内容区域 */}
                             <div className="b-content-header">
-                                <DateChooser onDateChange={this.onDateChange}></DateChooser>
+                                <div className="b-header-content">
+                                    <DateChooser onChange={this.onDateChange}></DateChooser>
+                                </div>
+                                <div className="b-header-content">
+                                    <GiftParser onChange={this.onGiftCheckChange} options={this.state.checkListGift}></GiftParser>
+                                </div>
                             </div>
                             <div className="b-content-body">
-                                <div className="b-chart-container">
+                                <div className="b-chart-container" style={{display: this.state.chartArgsShow['0'].data.length > 0 ? '' : 'none'}}>
                                     <PieChart refArg="countPieChart" style={{width: 350, height: 350, margin: 20}}
-                                        args={this.state.chartArgs['0']}>
+                                        args={this.state.chartArgsShow['0']}>
                                     </PieChart>
                                 </div>
-                                <div className="b-chart-container">
+                                <div className="b-chart-container" style={{display: this.state.chartArgsShow['1'].data.length > 0 ? '' : 'none'}}>
                                     <PieChart refArg="pricePieChart" style={{width: 350, height: 350, margin: 20}}
-                                        args={this.state.chartArgs['1']}>
+                                        args={this.state.chartArgsShow['1']}>
                                     </PieChart>
+                                </div>
+                                <div className="b-chart-container" style={{display: this.state.chartArgsShow['2'].data.length > 0 ? '' : 'none'}}>
+                                    <BarChart refArg="priceBarChart" style={{width: 700, height: Math.floor(Math.pow(this.state.chartArgsShow['2'].data.length, 1.1) * 40) + 120, margin: 20}}
+                                        args={this.state.chartArgsShow['2']}>
+                                    </BarChart>
+                                </div>
+                                <div className="b-chart-container" style={{display: this.state.chartArgsShow['3'].data.length > 0 ? '' : 'none'}}>
+                                    <BarChart refArg="priceBarChart" style={{width: 700, height: Math.floor(Math.pow(this.state.chartArgsShow['3'].data.length, 1.1) * 40) + 120, margin: 20}}
+                                        args={this.state.chartArgsShow['3']}>
+                                    </BarChart>
                                 </div>
                             </div>
-                            
                         </div>
                     </div>
                 </div>

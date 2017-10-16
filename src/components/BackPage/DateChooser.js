@@ -38,7 +38,7 @@ class DateChooser extends Component {
             dateRange: {},
             rangeValue: [],
         }
-        this.onDateChange = this.props.onDateChange
+        this.onDateChange = this.props.onChange
         this.chooseModeHandler = this.chooseModeHandler.bind(this)
         this.rangePickerChangeHandler = this.rangePickerChangeHandler.bind(this)
     }

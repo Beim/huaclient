@@ -1,0 +1,8 @@
+.b-gift-parser-wrapper {
+    display: flex;
+    justify-content: left;
+}
+
+.b-gift-parser-wrapper div {
+    margin-left: 10px;
+}

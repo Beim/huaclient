@@ -7,59 +7,74 @@ import 'echarts/lib/component/title'
 import 'echarts/lib/component/tooltip'
 
 
+
 const genOption = (title, subtitle, name, data) => {
-    let dataName = data.map(val => {
-        return val.name
+
+    data.sort((v1, v2) => {
+        return v1.value > v2.value
     })
+    let yAxisData = data.map(v => v.name)
+    let seriesData = data.map(v => v.value)
     return {
-        title : {
+        title: {
             text: title,
             subtext: subtitle ? subtitle : undefined,
-            x:'center'
+
+            // x: 'center',
         },
+        color: ['#3398DB'],
         tooltip : {
-            trigger: 'item',
-            formatter: "{a} <br/>{b} : {c} ({d}%)"
+            trigger: 'axis',
+            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
         },
-        legend: {
-            orient: 'vertical',
-            left: 'left',
-            data: dataName
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
         },
+        yAxis : [
+            {
+                type : 'category',
+                data : yAxisData,
+                axisTick: {
+                    alignWithLabel: true
+                }
+            }
+        ],
+        xAxis : [
+            {
+                type : 'value'
+            }
+        ],
         series : [
             {
-                name: name,
-                type: 'pie',
-                radius : '55%',
-                center: ['50%', '60%'],
-                data: data,
-                itemStyle: {
-                    emphasis: {
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
-                }
+                name,
+                type:'bar',
+                barWidth: '60%',
+                data: seriesData
             }
         ]
     }
+
 }
 
-class PieChart extends Component {
+
+class BarChart extends Component {
 
     /*
     props: {
-        refArg: 'countPieChart',
+        refArg: 'countBarChart',
         title: '数量统计',
         name: '根据礼物数量统计',
-        data: [
-            {value: 355, name: '直接'},
-            {value: 355, name: '直接'},
-            {value: 355, name: '直接'},
-        ]
+        data: {
+            '辣条': 100,
+            '节奏风暴': 3,
+        }
     }
     */
-
     componentDidMount() {
         const {title, subtitle, name, data} = this.props.args
         const option = genOption(title, subtitle, name, data)
@@ -74,6 +89,7 @@ class PieChart extends Component {
         this.myChart.resize({
             height: 'auto',
         })
+        
     }
 
     render() {
@@ -84,4 +100,4 @@ class PieChart extends Component {
 
 }
 
-export default PieChart
+export default BarChart
