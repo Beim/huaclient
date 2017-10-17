@@ -1,10 +1,5 @@
 import React, { Component } from 'react'
-import { config } from '../../config.js'
 import echarts from 'echarts/lib/echarts'
-import 'echarts/lib/chart/pie'
-import 'echarts/lib/chart/bar'
-import 'echarts/lib/component/title'
-import 'echarts/lib/component/tooltip'
 
 
 const genOption = (title, subtitle, name, data) => {

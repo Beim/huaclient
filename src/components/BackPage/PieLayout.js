@@ -168,7 +168,7 @@ class PieLayout extends Component {
                 </div>
                 <div className="ant-layout-container">
                     <div className="ant-layout-content">
-                        <div style={{ 'min-height': '100vh' }}>
+                        <div style={{ 'minHeight': '100vh' }}>
                             {/* 内容区域 */}
                             <div className="b-content-header">
                                 <div className="b-header-content">

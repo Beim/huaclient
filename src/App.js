@@ -5,6 +5,11 @@ import './App.css';
 import moment from 'moment'
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn'
+import 'echarts/lib/chart/pie'
+import 'echarts/lib/chart/bar'
+import 'echarts/lib/component/title'
+import 'echarts/lib/component/tooltip'
+
 import ManagePage from './components/ManagePage.js'
 import GiftPage from './components/GiftPage.js'
 import BackPage from './components/BackPage.js'
@@ -18,7 +23,7 @@ class App extends Component {
         <div className="App">
           <Route path="/index" component={ManagePage}></Route>
           <Route path="/gift" component={GiftPage}></Route>
-          <Route path="/back" component={BackPage}></Route>
+          {<Route path="/back" component={BackPage}></Route>}
         </div>
       </Router>
       
