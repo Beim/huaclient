@@ -9,13 +9,9 @@ import 'echarts/lib/component/tooltip'
 
 
 const genOption = (title, subtitle, name, data) => {
-    console.log('before sort')
-    console.log(data.slice())
     data.sort((v1, v2) => {
-        return v1.value >= v2.value
+        return v1.value - v2.value
     })
-    console.log('after sort')
-    console.log(data)
     let yAxisData = data.map(v => v.name)
     let seriesData = data.map(v => v.value)
     return {
