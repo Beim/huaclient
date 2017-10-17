@@ -5,6 +5,7 @@
   "dependencies": {
     "antd": "^2.13.6",
     "echarts": "^3.7.2",
+    "eject": "0.0.4",
     "moment": "^2.19.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
