@@ -12,7 +12,7 @@ import 'echarts/lib/component/tooltip'
 
 import ManagePage from './components/ManagePage.js'
 import GiftPage from './components/GiftPage.js'
-import BackPage from './components/BackPage.js'
+// import BackPage from './components/BackPage.js'
 
 moment.locale('zh-cn')
 
@@ -23,7 +23,7 @@ class App extends Component {
         <div className="App">
           <Route path="/index" component={ManagePage}></Route>
           <Route path="/gift" component={GiftPage}></Route>
-          {<Route path="/back" component={BackPage}></Route>}
+          {/* <Route path="/back" component={BackPage}></Route> */}
         </div>
       </Router>
       
