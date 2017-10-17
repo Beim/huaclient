@@ -131,6 +131,7 @@ class PieLayout extends Component {
             checkListGift.push(name)
     }
 
+    // DateChooser 组件中选择的时间改变时触发
     async onDateChange(dateRange) {
         const ret = await httpget(`http://${config.host}:${config.port}/api/get/giftdata?ts0=${dateRange.start}&&ts1=${dateRange.end}`)
         if (!ret || !ret.ok) return
@@ -141,9 +142,10 @@ class PieLayout extends Component {
         this.updateCheckListGift(checkListGift, data)
         const chartArgsShow = JSON.parse(JSON.stringify(chartArgs))
         this.setState({chartArgs, chartArgsShow, checkListGift})
-        console.log(data)
+        message.success('更新视图')
     }
 
+    // GfitParser 多选框组中选中的礼物改变时触发
     onGiftCheckChange(checkedGift) {
         const chartArgs = this.state.chartArgs
         const chartArgsShow = this.state.chartArgsShow
@@ -166,7 +168,7 @@ class PieLayout extends Component {
                 </div>
                 <div className="ant-layout-container">
                     <div className="ant-layout-content">
-                        <div style={{ 'max-height': 2333, 'min-height': 550 }}>
+                        <div style={{ 'min-height': '100vh' }}>
                             {/* 内容区域 */}
                             <div className="b-content-header">
                                 <div className="b-header-content">
@@ -177,22 +179,20 @@ class PieLayout extends Component {
                                 </div>
                             </div>
                             <div className="b-content-body">
-                                <div className="b-chart-container" style={{display: this.state.chartArgsShow['0'].data.length > 0 ? '' : 'none'}}>
-                                    <PieChart refArg="countPieChart" style={{width: 350, height: 350, margin: 20}}
+                                <div style={{display: 'flex', flexDirection: 'center'}}>
+                                    <PieChart refArg="countPieChart" style={{width: 350, height: 350, margin: 20, display: this.state.chartArgsShow['0'].data.length > 0 ? '' : 'none'}}
                                         args={this.state.chartArgsShow['0']}>
                                     </PieChart>
-                                </div>
-                                <div className="b-chart-container" style={{display: this.state.chartArgsShow['1'].data.length > 0 ? '' : 'none'}}>
-                                    <PieChart refArg="pricePieChart" style={{width: 350, height: 350, margin: 20}}
+                                    <PieChart refArg="pricePieChart" style={{width: 350, height: 350, margin: 20, display: this.state.chartArgsShow['1'].data.length > 0 ? '' : 'none'}}
                                         args={this.state.chartArgsShow['1']}>
                                     </PieChart>
                                 </div>
-                                <div className="b-chart-container" style={{display: this.state.chartArgsShow['2'].data.length > 0 ? '' : 'none'}}>
+                                <div style={{display: this.state.chartArgsShow['2'].data.length > 0 ? '' : 'none'}}>
                                     <BarChart refArg="priceBarChart" style={{width: 700, height: Math.floor(Math.pow(this.state.chartArgsShow['2'].data.length, 1.1) * 40) + 120, margin: 20}}
                                         args={this.state.chartArgsShow['2']}>
                                     </BarChart>
                                 </div>
-                                <div className="b-chart-container" style={{display: this.state.chartArgsShow['3'].data.length > 0 ? '' : 'none'}}>
+                                <div style={{display: this.state.chartArgsShow['3'].data.length > 0 ? '' : 'none'}}>
                                     <BarChart refArg="priceBarChart" style={{width: 700, height: Math.floor(Math.pow(this.state.chartArgsShow['3'].data.length, 1.1) * 40) + 120, margin: 20}}
                                         args={this.state.chartArgsShow['3']}>
                                     </BarChart>

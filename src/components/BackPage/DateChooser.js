@@ -45,8 +45,7 @@ class DateChooser extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         if (this.state.dateRange.start !== nextState.dateRange.start 
-            || this.state.dateRange.end !== nextState.dateRange.end
-            || this.state.currMode !== nextState.currMode) {
+            || this.state.dateRange.end !== nextState.dateRange.end) {
                 this.onDateChange(nextState.dateRange)
         }
         return true
