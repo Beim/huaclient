@@ -54,18 +54,6 @@ class GiftPage extends Component {
         }
     }
 
-    getQueryObj (){
-        let res = {}
-        if (window.location.search.length > 0) {
-            let queryArr = window.location.search.slice(1).split('&&').filter(v => v)
-            for (let query of queryArr) {
-                let keyValue = query.split('=')
-                res[keyValue[0]] = keyValue[1]
-            }
-        }
-        return res
-    }
-
     genGiftDivList() {
         let giftData = this.state.data
         let giftConfig = this.state.giftConfig
@@ -73,13 +61,7 @@ class GiftPage extends Component {
             let iconId = giftConfig[val.gift_name]
             return (
                 <div key={`span-div-${idx}`}>
-                    <img 
-                        src={
-                            this.getQueryObj()['iconType'] === 'gif'
-                            ? `http://s1.hdslb.com/bfs/static/blive/blfe-live-room/static/img/gift-images/image-gif/gift-${iconId}.gif`
-                            : `http://s1.hdslb.com/bfs/static/blive/blfe-live-room/static/img/gift-images/image-png/gift-${iconId}.png` 
-                            }  
-                        alt={val.gift_name} />
+                    <img src={`https://s1.hdslb.com/bfs/static/blive/blfe-live-room/static/img/gift-images/image-png/gift-${iconId}.png`}  alt={val.gift_name} />
                     <span className={`gift-span ${val.count >= val.goal ? 'heartbeat' : ''}`}>{val.count}/{val.goal}</span>    
                     <span className={`gift-span ${val.count >= val.goal ? 'heartbeat' : ''}`}>{val.reward}</span>
                 </div>

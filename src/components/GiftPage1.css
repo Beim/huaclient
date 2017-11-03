@@ -1,0 +1,26 @@
+.gift-item {
+    margin: 10px;
+    
+}
+
+.hua-text {
+    padding: 40px;
+    font-size: 300%;
+    font-family: "Microsoft YaHei" ! important;  
+    color:  #4db8ff;
+    font-weight:900;
+    text-shadow:#00f 3px 0 4px,#00f 0 3px 4px,#00f -3px 0 4px,#00f 0 -3px 4px;   
+}
+
+.heartbeat{
+         animation: heartbeat 1s infinite; 
+}
+@keyframes heartbeat{
+        from{opacity: .8;}
+        50%{opacity: 1;}
+        to{opacity: .8;}
+}
+
+.gift-span {
+    margin-left: 15px;
+}
