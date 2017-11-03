@@ -261,8 +261,9 @@ class ManagePage extends Component {
                 <div className="div-container tools">
                     <button data-toggle="modal" data-target="#new-gift-model" type="button" className="btn btn-success">新增</button>
                     <button onClick={this.startHandler.bind(this)} type="button" className={`btn ${this.state.runningState ? 'btn-warning' : 'btn-success'}`}>{this.state.runningState ? '停止' : '运行'}</button>
-                    <button onClick={window.open.bind(window, '/gift')} type="button" className="btn btn-success">展示页面1</button>
-                    <button onClick={window.open.bind(window, '/gift1')} type="button" className="btn btn-success">展示页面2</button>
+                    <button onClick={window.open.bind(window, '/gift')} type="button" className="btn btn-success">展示1</button>
+                    <button onClick={window.open.bind(window, '/gift1')} type="button" className="btn btn-success">展示2</button>
+                    <button onClick={window.open.bind(window, '/guard')} type="button" className="btn btn-success">舰队</button>
                 </div>
                 <div className="div-container">
                     <div className="table-responsive">  

@@ -13,6 +13,7 @@ import 'echarts/lib/component/tooltip'
 import ManagePage from './components/ManagePage.js'
 import GiftPage from './components/GiftPage.js'
 import GiftPage1 from './components/GiftPage1.js'
+import GuardPage from './components/GuardPage.js'
 // import BackPage from './components/BackPage.js'
 
 moment.locale('zh-cn')
@@ -25,6 +26,7 @@ class App extends Component {
           <Route path="/index" component={ManagePage}></Route>
           <Route path="/gift" component={GiftPage}></Route>
           <Route path="/gift1" component={GiftPage1}></Route>
+          <Route path="/guard" component={GuardPage}></Route>
           {/* <Route path="/back" component={BackPage}></Route> */}
         </div>
       </Router>
