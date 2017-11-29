@@ -53,3 +53,12 @@ td {
 .del-alert-model-body {
     text-align: center;
 }
+
+.alter-reward-body {
+    text-align: center;
+}
+
+.reward-edit-icon {
+    margin-left: 10px;
+    cursor: pointer;
+}

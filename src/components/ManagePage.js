@@ -151,6 +151,63 @@ class DelAlertModel extends Component {
     }
 }
 
+class AlterRewardModel extends Component {
+
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            reward: '',
+        }
+    }
+
+    inputChangeHandler(event) {
+        const target = event.target
+        const value = target.type === 'checkbox' ? target.checked : target.value
+        const name = target.name
+        this.setState({
+          [name]: value
+        })
+    }
+    
+    async alterRewardHandler() {
+        const newReward = this.state.reward.trim()
+        if (!newReward) return
+        this.setState({reward: ''})
+        const giftName = this.props.alterReward.giftName
+        let ret = await httpget(`http://${config.host}:${config.port}/api/set/reward/${giftName}/221?reward=${newReward}`)
+        if (ret && ret.ok === 1) {
+            // 需要提示删除成功?
+        }
+        else {
+            console.log('err: ', ret)
+        }
+    }
+
+    render() {
+        return (
+            <div className="modal fade" id="alter-reward-model" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header flex-center">
+                            <h4 className="modal-title" id="myModalLabel">修改【{this.props.alterReward.giftName}】的奖励</h4>
+                        </div>
+                        <div className="modal-body alter-reward-body">                            
+                            <input value={this.state.reward} onChange={this.inputChangeHandler.bind(this)} name="reward" type="text" placeholder="请输入达成奖励"></input>
+                        </div>
+                        <div className="modal-footer">
+                            
+                            <button type="button" className="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button onClick={this.alterRewardHandler.bind(this)} type="button" className="btn btn-primary" data-dismiss="modal">提交更改</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+}
+
 class ManagePage extends Component {
 
     constructor(props) {
@@ -162,6 +219,10 @@ class ManagePage extends Component {
             data: [],
             delGiftName: '',
             runningState: false,
+            alterReward: {
+                giftName: '',
+                rewardName: '',
+            },
         }
     }
 
@@ -204,6 +265,12 @@ class ManagePage extends Component {
         this.setState({delGiftName: giftName})
     }
 
+    async alterRewardHandler(giftName, rewardName) {
+        this.setState({
+            alterReward: {giftName, rewardName},
+        })
+    }
+
     async achieveGiftHandler(giftName) {
         let ret = await httpget(`http://${config.host}:${config.port}/api/achieve/goal/${giftName}/${config.room_id}`)
         if (ret && ret.ok === 1) {
@@ -242,7 +309,10 @@ class ManagePage extends Component {
                     <td>{val.gift_name}</td>
                     <td>{val.count}/{val.goal}</td>
                     <td>{val.step}</td>
-                    <td>{val.reward}</td>
+                    <td>
+                        {val.reward}
+                        <span onClick={this.alterRewardHandler.bind(this, val.gift_name, val.reward)} className="glyphicon glyphicon-edit reward-edit-icon" data-toggle="modal" data-target="#alter-reward-model"></span>
+                    </td>
                     <td>{Math.floor(val.goal / val.step) - 1}</td>
                     <td>
                         <button onClick={this.achieveGiftHandler.bind(this, val.gift_name)} type="button" className="btn btn-primary btn-xs">达成</button>
@@ -287,6 +357,7 @@ class ManagePage extends Component {
                 </div>
                 <NewGiftModel giftExisted={this.state.data.map(val => val.gift_name)}></NewGiftModel>
                 <DelAlertModel delGiftName={this.state.delGiftName}></DelAlertModel>
+                <AlterRewardModel alterReward={this.state.alterReward}></AlterRewardModel>
             </div>
         )
     }
