@@ -11,12 +11,14 @@ class GiftPage extends Component {
             giftConfig: {},
             data: [],
             dataTimer: null,
+            textStyle: {},
         }
     }
 
     async componentDidMount() {
         await this.setGiftConfig()
         await this.setDataState()
+        await this.setTextStyle()
         let dataTimer = setInterval(this.setDataState.bind(this), 2000)
         this.setState({dataTimer})
         // setTimeout(() => {
@@ -54,6 +56,23 @@ class GiftPage extends Component {
         }
     }
 
+    async setTextStyle() {
+        let ret = await httpget(`http://${config.host}:${config.port}/api/get/displaygiftconfig`)
+        if (ret && ret.ok === 1) {
+            let c1 = ret.data.fontColor
+            let c2 = ret.data.textShadowColor
+            this.setState({
+                textStyle: {
+                    color: `#${c1}`,
+                    textShadow: `#${c2} 3px 0 4px,#${c2} 0 3px 4px,#${c2} -3px 0 4px,#${c2} 0 -3px 4px`
+                }
+            })
+        }
+        else {
+            console.log('err: ', ret)
+        }
+    }
+
     genGiftDivList() {
         let giftData = this.state.data
         let giftConfig = this.state.giftConfig
@@ -72,7 +91,7 @@ class GiftPage extends Component {
 
     render() {
         return (
-            <div className="hua-text" id="text-wrapper">
+            <div className="hua-text" id="text-wrapper" style={this.state.textStyle}>
                 {this.genGiftDivList()}
             </div>
         )

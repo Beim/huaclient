@@ -62,3 +62,7 @@ td {
     margin-left: 10px;
     cursor: pointer;
 }
+
+.alter-display-config-body {
+    text-align: center;
+}

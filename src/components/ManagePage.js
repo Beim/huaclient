@@ -208,6 +208,71 @@ class AlterRewardModel extends Component {
 
 }
 
+class AlterDisplayConfigModel extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            fontColor: '',
+            textShadowColor: '',
+        }
+    }
+
+    inputChangeHandler(event) {
+        const target = event.target
+        const value = target.type === 'checkbox' ? target.checked : target.value
+        const name = target.name
+        this.setState({
+          [name]: value
+        })
+    }
+
+    async alterDisplayConfigHandler() {
+        let fontColor = this.state.fontColor.trim()
+        if (fontColor[0] === '#') fontColor = fontColor.slice(1)
+        let textShadowColor = this.state.textShadowColor.trim()
+        if (textShadowColor[0] === '#') textShadowColor = textShadowColor.slice(1)
+        if (fontColor === '' || textShadowColor === '') {
+            console.log('err: fontColor or textShadowColor can not be null')
+        }
+        else {
+            let ret = await httpget(`http://${config.host}:${config.port}/api/set/displaygiftconfig?fontColor=${fontColor}&&textShadowColor=${textShadowColor}`)
+            if (ret && ret.ok === 1) {
+                // 需要提示更改成功？
+            }
+            else {
+                console.log('err: ', ret)
+            }
+        }
+    }
+
+    render() {
+        return (
+            <div className="modal fade" id="alter-display-config-model" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header flex-center">
+                            <h4 className="modal-title" id="myModalLabel">修改展示页面字体颜色</h4>
+                        </div>
+                        <div className="modal-body alter-display-config-body">    
+                            <span>字体颜色：</span>                        
+                            <input value={this.state.fontColor} onChange={this.inputChangeHandler.bind(this)} name="fontColor" type="text" placeholder="默认 4db8ff"></input>
+                            <br/>
+                            <br/>
+                            <span>阴影颜色：</span>
+                            <input value={this.state.textShadowColor} onChange={this.inputChangeHandler.bind(this)} name="textShadowColor" type="text" placeholder="默认 0000ff"></input>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="button" className="btn btn-default" onClick={window.open.bind(window, 'https://www.w3cschool.cn/tools/index?name=cpicker', '_blank')}>拾色器</button>
+                            <button onClick={this.alterDisplayConfigHandler.bind(this)} type="button" className="btn btn-primary" data-dismiss="modal">提交更改</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+}
+
 class ManagePage extends Component {
 
     constructor(props) {
@@ -334,6 +399,7 @@ class ManagePage extends Component {
                     <button onClick={window.open.bind(window, '/gift')} type="button" className="btn btn-success">展示1</button>
                     <button onClick={window.open.bind(window, '/gift1')} type="button" className="btn btn-success">展示2</button>
                     <button onClick={window.open.bind(window, '/guard')} type="button" className="btn btn-success">舰队</button>
+                    <button data-toggle="modal" data-target="#alter-display-config-model" type="button" className="btn btn-success">颜色</button>
                 </div>
                 <div className="div-container">
                     <div className="table-responsive">  
@@ -358,6 +424,7 @@ class ManagePage extends Component {
                 <NewGiftModel giftExisted={this.state.data.map(val => val.gift_name)}></NewGiftModel>
                 <DelAlertModel delGiftName={this.state.delGiftName}></DelAlertModel>
                 <AlterRewardModel alterReward={this.state.alterReward}></AlterRewardModel>
+                <AlterDisplayConfigModel></AlterDisplayConfigModel>
             </div>
         )
     }
