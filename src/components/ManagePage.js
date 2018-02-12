@@ -397,7 +397,7 @@ class ManagePage extends Component {
                     <button data-toggle="modal" data-target="#new-gift-model" type="button" className="btn btn-success">新增</button>
                     <button onClick={this.startHandler.bind(this)} type="button" className={`btn ${this.state.runningState ? 'btn-warning' : 'btn-success'}`}>{this.state.runningState ? '停止' : '运行'}</button>
                     <button onClick={window.open.bind(window, `http://${config.host}:5001/gift`)} type="button" className="btn btn-success">展示1</button>
-                    {/* <button onClick={window.open.bind(window, '/gift1')} type="button" className="btn btn-success">展示2</button> */}
+                    <button onClick={window.open.bind(window, `http://${config.host}:5001/gift1`)} type="button" className="btn btn-success">展示2</button>
                     <button onClick={window.open.bind(window, `http://${config.host}:5001/guard`)} type="button" className="btn btn-success">舰队</button>
                     <button data-toggle="modal" data-target="#alter-display-config-model" type="button" className="btn btn-success">颜色</button>
                 </div>
