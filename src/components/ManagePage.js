@@ -232,9 +232,15 @@ class AlterProjRankDurationModel extends Component {
     async alterDurationHandler() {
         const duration = parseInt(this.state.duration) * 60
         const idx = this.props.alterProjRankDuration.idx
-        let ret = await httpget(`http://${config.host}:${config.port}/api/set/proj/duration?idx=${idx}&&duration=${duration}`)
+        let ret = null
+        if (this.props.alterProjRankDuration.isOnlist) {
+            ret = await httpget(`http://${config.host}:${config.port}/api/set/proj/duration?idx=${idx}&&duration=${duration}`)
+        }
+        else {
+            ret = await httpget(`http://${config.host}:${config.port}/api/set/proj/reopen?idx=${idx}&&duration=${duration}`)
+        }
         if (ret && ret.ok === 1) {
-            // 需要提示删除成功?
+            // 需要提示成功?
         }
         else {
             console.log('err: ', ret)
@@ -466,6 +472,7 @@ class ManagePage extends Component {
                 idx: 0,
                 duration: 0,
                 name: '',
+                isOnlist: true, // false 表示改动offlist
             },
             alterProjRankPos: {
                 idx: 0,
@@ -536,9 +543,9 @@ class ManagePage extends Component {
         })
     }
 
-    alterProjRankDurationHandler(idx, duration, name) {
+    alterProjRankDurationHandler(idx, duration, name, isOnlist) {
         this.setState({
-            alterProjRankDuration: {idx, duration, name}
+            alterProjRankDuration: {idx, duration, name, isOnlist}
         })
     }
 
@@ -627,7 +634,7 @@ class ManagePage extends Component {
                     </td>
                     <td>
                         {parseS2M(parseInt(val.duration))}
-                        <span onClick={this.alterProjRankDurationHandler.bind(this, idx, val.duration, val.name)} className="glyphicon glyphicon-edit reward-edit-icon" data-toggle="modal" data-target="#alter-projrank-duration-model"></span>
+                        <span onClick={this.alterProjRankDurationHandler.bind(this, idx, val.duration, val.name, true)} className="glyphicon glyphicon-edit reward-edit-icon" data-toggle="modal" data-target="#alter-projrank-duration-model"></span>
                     </td>
                     <td>
                         <button onClick={this.adjustPosProjRankHandler.bind(this, idx, val.name, onlist.length)} type="button" className="btn btn-primary btn-xs" data-toggle="modal" data-target="#alter-projrank-pos-model">位置</button>
@@ -641,7 +648,10 @@ class ManagePage extends Component {
                 <tr key={`genProjRankTrOfflist${idx}`}>
                     <td>{idx + 1}</td>
                     <td>{val.name}</td>
-                    <td>{parseS2M(parseInt(val.duration))}</td>
+                    <td>
+                        {parseS2M(parseInt(val.duration))}
+                        <span onClick={this.alterProjRankDurationHandler.bind(this, idx, val.duration, val.name, false)} className="glyphicon glyphicon-edit reward-edit-icon" data-toggle="modal" data-target="#alter-projrank-duration-model"></span>
+                    </td>
                     <td></td>
                 </tr>
             )
