@@ -478,7 +478,11 @@ class ManagePage extends Component {
                 idx: 0,
                 name: '',
                 maxIdx: 0,
-            }
+            },
+            delProjRank: {
+                idx: 0,
+                on: 1, // 1=>onlist, 0=>offlist
+            },
         }
     }
 
@@ -584,6 +588,15 @@ class ManagePage extends Component {
         }
     }
 
+    async delProjRankHandler(onflag, idx) {
+        const ret = await httpget(`http://${config.host}:${config.port}/api/del/proj?on=${onflag}&&idx=${idx}`)
+        if (ret && ret.ok === 1) {
+            window.location.href = window.location.pathname
+        }
+        else {
+            console.log('err: ', ret)
+        }
+    }
 
     genTr() {
         const data = this.state.data
@@ -638,6 +651,7 @@ class ManagePage extends Component {
                     </td>
                     <td>
                         <button onClick={this.adjustPosProjRankHandler.bind(this, idx, val.name, onlist.length)} type="button" className="btn btn-primary btn-xs" data-toggle="modal" data-target="#alter-projrank-pos-model">位置</button>
+                        <button onClick={this.delProjRankHandler.bind(this, 1, idx)} style={{marginLeft: '5%'}} data-toggle="modal" data-target="#del-projrank-model" type="button" className="btn btn-primary btn-xs">删除</button>
                     </td>
                 </tr>
             )
@@ -652,7 +666,9 @@ class ManagePage extends Component {
                         {parseS2M(parseInt(val.duration))}
                         <span onClick={this.alterProjRankDurationHandler.bind(this, idx, val.duration, val.name, false)} className="glyphicon glyphicon-edit reward-edit-icon" data-toggle="modal" data-target="#alter-projrank-duration-model"></span>
                     </td>
-                    <td></td>
+                    <td>
+                        <button onClick={this.delProjRankHandler.bind(this, 0, idx)} data-toggle="modal" data-target="#del-projrank-model" type="button" className="btn btn-primary btn-xs">删除</button>
+                    </td>
                 </tr>
             )
         })
